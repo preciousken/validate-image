@@ -1,24 +1,30 @@
-var isValidImage = function (url, callback) {
-    var img = new Image();
-    img.src = url;
+export const notBroken = async (urlParams) => {
+  return new Promise((resolve, reject) => {
+    var isValidImage = function (url, callback) {
+      var img = new Image();
+      img.src = url;
 
-    img.onerror = function () {
+      img.onerror = function () {
         callback(url, false);
-    };
+      };
 
-    img.onload = function () {
+      img.onload = function () {
         callback(url, true);
+      };
     };
+
+    var callbackFunction = function (url, isValid) {
+      console.log("callbackFunction()",urlParams,isValid)
+      if (isValid) {
+        resolve(true);
+      } else {
+        resolve(false);
+      }
+    };
+
+    isValidImage(urlParams, callbackFunction);
+  });
 };
 
-var callbackFunction = function (url, isValid) {
-    if (isValid) {
-        alert(url + ' is valid image');
-        // Do whatever logic you want
-    } else {
-        alert(url + ' is invalid image');
-        // Do whatever logic you want
-    }
-};
-
-isValidImage('http://nonexistentUrl.com/image.png', callbackFunction);
+//========== usage goes in here
+const response = await notBroken(imgUrl)
